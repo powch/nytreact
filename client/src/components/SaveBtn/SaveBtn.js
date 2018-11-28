@@ -8,6 +8,7 @@ const SaveBtn = props => (
     title={props.title}
     url={props.url}
     date={props.date}
+    id={props._id}
   >
     Save
   </button>

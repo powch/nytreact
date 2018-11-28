@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import DeleteBtn from "../../components/DeleteBtn";
 import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
-import { Input, TextArea, FormBtn } from "../../components/Form";
+import { Input, FormBtn } from "../../components/Form";
 
 class Articles extends Component {
   state = {
@@ -16,20 +14,20 @@ class Articles extends Component {
   };
 
   saveArticle = event => {
-    const title = event.target.title;
-    const url = event.target.url;
-    const date = event.target.date;
-    
-    const arr = { title, url, date };
+    const e = event.target;
+    const id = e.getAttribute('id');
+    const title = e.getAttribute('title');
+    const url = e.getAttribute('url');
+    const date = e.getAttribute('date');
+    const searchArticles = this.state.searchArticles;
 
-    console.log(arr);
+    const arr = { id, title, url, date };
 
-    API.saveArticle(arr);
-  };
-
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadArticles())
+    API.saveArticle(arr)
+      .then(res => {
+        const filteredArray = searchArticles.filter(article => article.id !== id);
+        this.setState({ searchArticles: filteredArray });
+      })
       .catch(err => console.log(err));
   };
 
@@ -44,9 +42,10 @@ class Articles extends Component {
     event.preventDefault();
     if (this.state.topic && this.state.start_year && this.state.end_year) {
       API.searchArticles(this.state.topic, this.state.start_year, this.state.end_year)
-        .then(res =>
-          this.setState({ searchArticles: res.data.response.docs })
-        )
+        .then(res => {
+          console.log(res.data.response.docs);
+          this.setState({ searchArticles: res.data.response.docs });
+        })
         .catch(err => console.log(err));
     }
   };
@@ -59,9 +58,12 @@ class Articles extends Component {
               <h1>Search</h1>
             </Jumbotron>
             <form>
-              <Input value={this.state.topic} onChange={this.handleInputChange} name="topic" placeholder="Topic (required)" />
-              <Input value={this.state.start_year} onChange={this.handleInputChange} name="start_year" placeholder="Start Year (required)" />
-              <Input value={this.state.end_year} onChange={this.handleInputChange} name='end_year' placeholder='End Year (required)' />
+              Topic (required)
+              <Input value={this.state.topic} onChange={this.handleInputChange} name="topic" placeholder="Green Energy" />
+              Start Year (required)
+              <Input value={this.state.start_year} onChange={this.handleInputChange} name="start_year" placeholder="YYYYMMDD" />
+              End Year (required)
+              <Input value={this.state.end_year} onChange={this.handleInputChange} name="end_year" placeholder="YYYYMMDD" />
               <FormBtn disabled={!(this.state.topic && this.state.start_year && this.state.end_year)} onClick={this.handleFormSubmit}>
                 Search Articles
               </FormBtn>
@@ -74,19 +76,21 @@ class Articles extends Component {
               <h1>Results</h1>
             </Jumbotron>
             <List>
-              {
-                this.state.searchArticles.length ? 
-                this.state.searchArticles.slice(0, 5).map(article => (
-                  <ListItem
-                    key={article._id}
-                    title={article.headline.main}
-                    url={article.web_url}
-                    date={article.pub_date}
-                    saveArticle={this.saveArticle}
-                  />
-                )) : 
-                <h2>No search results</h2>
-              }
+              {this.state.searchArticles.length ? this.state.searchArticles
+                  .slice(0, 5)
+                  .map(article => {
+                    console.log(article);
+                    return (
+                      <ListItem
+                        key={article._id}
+                        id={article._id}
+                        title={article.headline.main}
+                        url={article.web_url}
+                        date={article.pub_date}
+                        saveArticle={this.saveArticle}
+                      />
+                    );
+                  }) : <h2>No search results</h2>}
             </List>
           </Col>
         </Row>
