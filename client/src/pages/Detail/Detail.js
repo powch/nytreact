@@ -31,18 +31,20 @@ class Detail extends Component {
         </Jumbotron>
         <Container>
           <List>
-            {this.state.articles.length ? this.state.articles
-              .map(article => (
-                <ListItem
-                  key={article._id}
-                  id={article._id}
-                  title={article.title}
-                  url={article.url}
-                  date={article.date}
-                  deleteArticle={this.deleteArticle}
-                  favorite={'true'}
-                />
-              )) : <h3>No Favorites Added!</h3>
+            {(this.state.articles.length) 
+              ? this.state.articles
+                .map(article => (
+                  <ListItem
+                    key={article._id}
+                    id={article._id}
+                    title={article.title}
+                    url={article.url}
+                    date={article.date}
+                    deleteArticle={this.deleteArticle}
+                    favorite={'true'}
+                  />
+              )) 
+              : <h3>No Favorites Added!</h3>
               
             }
           </List>

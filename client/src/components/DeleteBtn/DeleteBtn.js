@@ -6,7 +6,7 @@ import "./DeleteBtn.css";
 const DeleteBtn = props => (
   <span 
     className="delete-btn" 
-    onClick={props.deleteArticle(props.id)}  
+    onClick={() => props.deleteArticle(props.id)}  
   >
     ✗
   </span>
