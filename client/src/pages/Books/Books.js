@@ -7,12 +7,24 @@ import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, TextArea, FormBtn } from "../../components/Form";
 
-class Books extends Component {
+class Articles extends Component {
   state = {
     searchArticles: [],
     topic: "",
     start_year: "",
     end_year: ""
+  };
+
+  saveArticle = event => {
+    const title = event.target.title;
+    const url = event.target.url;
+    const date = event.target.date;
+    
+    const arr = { title, url, date };
+
+    console.log(arr);
+
+    API.saveArticle(arr);
   };
 
   deleteBook = id => {
@@ -70,6 +82,7 @@ class Books extends Component {
                     title={article.headline.main}
                     url={article.web_url}
                     date={article.pub_date}
+                    saveArticle={this.saveArticle}
                   />
                 )) : 
                 <h2>No search results</h2>
@@ -81,4 +94,4 @@ class Books extends Component {
   }
 }
 
-export default Books;
+export default Articles;

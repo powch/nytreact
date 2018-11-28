@@ -1,6 +1,4 @@
-import dotenv from 'dotenv';
-import axios from "axios";
-dotenv.config();
+import axios from 'axios';
 
 export default {
   //Search NY Times for articles
@@ -11,18 +9,18 @@ export default {
   },
   // Gets all books
   getArticles: function() {
-    return axios.get("/api/articles");
+    return axios.get('/api/articles');
   },
   // Gets the book with the given id
   getBook: function(id) {
-    return axios.get("/api/books/" + id);
+    return axios.get('/api/books/' + id);
   },
   // Deletes the book with the given id
   deleteArticle: function(id) {
-    return axios.delete("/api/articles/" + id);
+    return axios.delete('/api/articles/' + id);
   },
   // Saves a book to the database
-  saveArticle: function(bookData) {
-    return axios.post("/api/articles", bookData);
+  saveArticle: function(articleData) {
+    return axios.post('/api/articles', articleData);
   }
 };
